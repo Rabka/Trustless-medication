@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustLessAPI", "TrustLessAPI\TrustLessAPI.csproj", "{DD839D8D-5BE2-45F7-84BE-7262BF7C0227}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustLessAPI", "TrustLessAPI\TrustLessAPI\TrustLessAPI.csproj", "{DD839D8D-5BE2-45F7-84BE-7262BF7C0227}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustLessClient", "TrustLessClient\TrustLessClient.csproj", "{A6336ABE-8336-4F27-AAA9-E311FD2FBDA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{DD839D8D-5BE2-45F7-84BE-7262BF7C0227}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD839D8D-5BE2-45F7-84BE-7262BF7C0227}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD839D8D-5BE2-45F7-84BE-7262BF7C0227}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6336ABE-8336-4F27-AAA9-E311FD2FBDA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6336ABE-8336-4F27-AAA9-E311FD2FBDA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6336ABE-8336-4F27-AAA9-E311FD2FBDA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6336ABE-8336-4F27-AAA9-E311FD2FBDA2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
