@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiChainLib", "Multichain
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiChainLib.Harness", "MultichainLib.Harness\MultiChainLib.Harness.csproj", "{E59E905D-1601-4B15-A6E5-ACE8FD89E1DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustlessClientWeb", "TrustlessClientWeb\TrustlessClientWeb.csproj", "{466FD4D8-D804-4D23-8614-3736C45B18C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E59E905D-1601-4B15-A6E5-ACE8FD89E1DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E59E905D-1601-4B15-A6E5-ACE8FD89E1DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E59E905D-1601-4B15-A6E5-ACE8FD89E1DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{466FD4D8-D804-4D23-8614-3736C45B18C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{466FD4D8-D804-4D23-8614-3736C45B18C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{466FD4D8-D804-4D23-8614-3736C45B18C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{466FD4D8-D804-4D23-8614-3736C45B18C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
