@@ -12,7 +12,6 @@ namespace TrustLessClient
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("test 1");
             try
             {
                 var task = Task.Run(async () =>
@@ -35,9 +34,9 @@ namespace TrustLessClient
 
         internal async Task DoMagic()
         {
-            // connect to the client...
-            var client = new MultiChainLib.MultiChainClient("127.0.0.1", 4756, false, "multichainrpc", "8XZtakGxSY8GceRNJragzPHR3hUW2Jf5zQk4zUyjUgky", "trustChain");
-
+            // connect to the client... til server
+            var client = new MultiChainLib.MultiChainClient("130.226.133.59", 7172, false, "multichainrpc", "BvrGYKXpxyFGxxzsqnwe3qs8hSbFvRM6fB6X3bjyyEaK", "trustChain");
+            
             // get some info back...
             var info = await client.GetInfoAsync();
             Console.WriteLine("Chain: {0}, difficulty: {1}", info.Result.ChainName, info.Result.Difficulty);
