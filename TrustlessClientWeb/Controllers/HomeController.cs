@@ -14,7 +14,17 @@ namespace TrustlessClientWeb.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            ViewBag.S = Repo.GetS();
+            ViewBag.F = Repo.GetF();
+
+            return View("Index");
+        }
+
+        public ActionResult NewStatementAction(string drug1, string drug2, string description)
+        {
+            Repo.SendNewStatment(drug1, drug2, description);
+
+            return Index();
         }
     }
 }

@@ -3,36 +3,31 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Web;
+using System.Net;
+using System.Net.Http;
 
 namespace TrustlessClientWeb.Models
 {
     public class Repository
     {
-        static ConcurrentDictionary<string, NewStatement> _NewStatments = new ConcurrentDictionary<string, NewStatement>();
         static ConcurrentDictionary<string, NewStatement> _DebatableStatements = new ConcurrentDictionary<string, NewStatement>();
+
+        private readonly HttpClient _client = new HttpClient { BaseAddress = new Uri("http://wattosshop.azurewebsites.net/") };
 
         public Repository()
         {
-            
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            _client.DefaultRequestHeaders.Add("Authorization", Repository.Token);
         }
 
-        public NewStatement MakeNewStatment()
+        public void SendNewStatment(string drug1, string drug2, string description)
         {
-            NewStatement item = new NewStatement();
-            item.Key = Guid.NewGuid().ToString();
-            _NewStatments[item.Key] = item;
-            return item;
-        }
-
-        public void SendNewStatment(NewStatement item)
-        {
-            _NewStatments.TryGetValue(item.Key, out item);
-            _NewStatments.TryRemove(item.Key, out item);
             
             //TODO send newStatment to server
         }
 
-        public List<NewStatement> GetDebatableStatements(string key)
+        public List<NewStatement> GetDebatableStatements()
         {
             //TODO ask server for debateble statements
 
