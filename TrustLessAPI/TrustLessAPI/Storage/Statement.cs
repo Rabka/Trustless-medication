@@ -12,5 +12,7 @@ namespace TrustLessAPI.Models
         public string MedicinOne { get; set; }
         public string MedicinTwo { get; set; }
         public string Description { get; set; }
+         
+
     }
 }

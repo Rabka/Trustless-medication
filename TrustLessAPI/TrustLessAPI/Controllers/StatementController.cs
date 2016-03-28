@@ -71,6 +71,22 @@ namespace TrustLessAPI.Controllers
             
         }
 
+        [AllowAnonymous]
+        [Route("TestNow")]
+        [HttpGet]
+        public HttpResponseMessage TestNow()
+        {
+         
+            using (DataContext context = new DataContext())
+            {
+             
+
+                VerifyStatementClosure(context, null);
+
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
+        }
+
 
         [HttpPost]
         public HttpResponseMessage Recommend([FromBody] Statement statement, Person person,bool trusted)
@@ -105,12 +121,14 @@ namespace TrustLessAPI.Controllers
 
         private void VerifyStatementClosure(DataContext context, Statement statement)
         {
+            BlockChain.MakeRecommendation(new Recommendation(){ Person = statement.Person,IsRecommended = true,Statement = statement});
+            return;
             if (IsStatementComplete(context, statement))
             {
                 if (IsStatementValid(context, statement))
                 {
                     //Issue S
-                    BlockChain.IssueS(statement.Person,statement);
+                    BlockChain.IssueS(null,statement);
                 }
                 else
                 {

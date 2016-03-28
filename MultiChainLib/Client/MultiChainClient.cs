@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using MultiChainLib.Model;
 
 namespace MultiChainLib
 {
@@ -352,9 +353,14 @@ namespace MultiChainLib
             return this.ExecuteAsync<AddressResponse>("validateaddress", 0, address);
         }
 
-        public Task<JsonRpcResponse<List<TransactionResponse>>> ListTransactionsAsync(string account = null, int count = 10, int skip = 0, bool watchOnly = false)
+        public Task<JsonRpcResponse<List<TransactionResponse>>> ListAddressTransactions(string account = null, int count = 10, int skip = 0, bool watchOnly = false)
         {
-            return this.ExecuteAsync<List<TransactionResponse>>("listtransactions", 0, account ?? string.Empty, count, skip, watchOnly);
+            return this.ExecuteAsync<List<TransactionResponse>>("listaddresstransactions", 0, account ?? string.Empty, count, skip, watchOnly);
+        }
+
+        public Task<JsonRpcResponse<List<TransactionResponse>>> ListTransactionsAsync(string address = null, string account = null, int count = 10, int skip = 0, bool watchOnly = false)
+        {
+            return this.ExecuteAsync<List<TransactionResponse>>("listtransactions", 0, account ?? string.Empty,address, count, skip, watchOnly);
         }
 
         public Task<JsonRpcResponse<string>> SendFromAsync(string fromAccount, string toAddress, decimal amount, int confirmations = 1, string comment = null, string commentTo = null)
@@ -372,6 +378,10 @@ namespace MultiChainLib
             return this.ExecuteAsync<TxOutSetInfoResponse>("gettxoutsetinfo", 0);
         }
 
+        public Task<JsonRpcResponse<PrepareLockUnspentResponse>> PrepareLockUnspent(Dictionary<string, int> amount)
+        {
+            return this.ExecuteAsync<PrepareLockUnspentResponse>("preparelockunspent", 0, amount);
+        }
         public Task<JsonRpcResponse<decimal>> GetBalanceAsync(string account = null, int confirmations = 1, bool watchOnly = false)
         {
             return this.ExecuteAsync<decimal>("getbalance", 0, account ?? "*", confirmations, watchOnly);
@@ -383,9 +393,9 @@ namespace MultiChainLib
         }
 
         // not implemented -- contact us with specific implementation requirements and we'll implement this...
-        public Task<JsonRpcResponse<string>> CreateRawTransactionAync()
+        public Task<JsonRpcResponse<string>> CreateRawTransactionAync(IEnumerable<IEnumerable<string>> inputs, IEnumerable<string> addresses)
         {
-            throw new NotImplementedException("This operation has not been implemented.");
+            return this.ExecuteAsync<string>("createrawtransaction", 0, inputs, addresses);
         }
 
         // not implemented -- contact us with specific implementation requirements and we'll implement this...

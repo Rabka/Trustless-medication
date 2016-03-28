@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using TrustLessAPI.Storage;
 
 namespace TrustLessAPI.Models
 {
@@ -21,6 +22,7 @@ namespace TrustLessAPI.Models
         public int StatementId { get; set; } 
         public Statement Statement { get; set; }
         public bool IsRecommended { get; set; }
+        public ReservedTransaction Transaction { get; set; }
 
     }
 }

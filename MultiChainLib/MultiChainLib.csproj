@@ -73,6 +73,7 @@
     <Compile Include="Model\NetworkResponse.cs" />
     <Compile Include="Model\PeerResponse.cs" />
     <Compile Include="Model\PermissionsResponse.cs" />
+    <Compile Include="Model\PrepareLockUnspentResponse.cs" />
     <Compile Include="Model\ReceivedResponse.cs" />
     <Compile Include="Model\ScriptResponse.cs" />
     <Compile Include="Model\ScriptSigResponse.cs" />
