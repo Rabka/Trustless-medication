@@ -18,7 +18,7 @@ namespace TrustlessClientWeb.Models
         {
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            _client.DefaultRequestHeaders.Add("Authorization", Repository.Token);
+            //_client.DefaultRequestHeaders.Add("Authorization", Repository.Token);
         }
 
         public void SendNewStatment(string drug1, string drug2, string description)
@@ -42,6 +42,12 @@ namespace TrustlessClientWeb.Models
         public int GetS()
         {
             //TODO ask client node for S'er
+
+            var client = new MultiChainLib.MultiChainClient("130.226.133.59", 7172, false, "multichainrpc", "BvrGYKXpxyFGxxzsqnwe3qs8hSbFvRM6fB6X3bjyyEaK", "trustChain");
+
+            // get some info back...
+            var info = await client.GetInfoAsync();
+            Console.WriteLine("Chain: {0}, difficulty: {1}", info.Result.ChainName, info.Result.Difficulty);
 
             return 0;
         }
