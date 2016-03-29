@@ -55,6 +55,30 @@ namespace TrustlessClientWeb.Models
         public int GetF()
         {
             //TODO ask client node for F'er
+            // list the assets...
+            while (true)
+            {
+                var assets = await client.ListAssetsAsync();
+                assets.AssertOk();
+                AssetResponse found = null;
+                foreach (var walk in assets.Result)
+                {
+                    Console.WriteLine("Name: {0}, ref: {1}", walk.Name, walk.AssetRef);
+
+                    if (walk.Name == assetName)
+                        found = walk;
+                }
+                Console.WriteLine();
+
+                // have we found it?
+                if (string.IsNullOrEmpty(found.AssetRef))
+                {
+                    Console.WriteLine("Asset is not ready - waiting (this can take 30 seconds or more)...");
+                    Thread.Sleep(10000);
+                }
+                else
+                    break;
+            }
 
             return 0;
         }
