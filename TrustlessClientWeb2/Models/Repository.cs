@@ -9,8 +9,9 @@ using TrustLessModelLib;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Runtime.Serialization.Formatters.Binary;
 
-namespace TrustlessClientWeb.Models
+namespace TrustlessClientWeb2.Models
 {
     public class Repository
     {
@@ -32,18 +33,32 @@ namespace TrustlessClientWeb.Models
         /// <param name="drug2">The secund drug</param>
         /// <param name="description"></param>
         /// <returns></returns>
-        public async Task SendNewStatment(string drug1, string drug2, string description)
+        public async Task SendNewStatment(string medicinOne, string medicinTwo, string description)
         {
             Person p = new Person();
-            Statement S = new Statement() { Person = p, MedicinOne = drug1, MedicinTwo = drug2, Description = description };
+            Statement S = new Statement() { Person = p, MedicinOne = medicinOne, MedicinTwo = medicinTwo, Description = description };
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(S));
             HttpResponseMessage response = await _client.PostAsync("CreateStatement", content);
+
+            //TODO give response
         }
 
-        public List<Statement> GetDebatableStatements()
+        public async Task<List<Statement>> GetDebatableStatements()
         {
             //TODO ask server for debateble statements
+
+            HttpResponseMessage response = await _client.GetAsync("");
+
+            if(response.IsSuccessStatusCode)
+            {
+                var stream = await response.Content.ReadAsStreamAsync();
+                stream.Seek(0, SeekOrigin.Begin);
+                BinaryFormatter formatter = new BinaryFormatter();
+                List<Statement> statementList = (List<Statement>) formatter.Deserialize(stream);
+
+                return statementList;
+            }
 
             return new List<Statement>();
         }

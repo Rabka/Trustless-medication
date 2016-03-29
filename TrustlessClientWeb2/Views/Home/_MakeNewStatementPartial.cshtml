@@ -1,0 +1,29 @@
+﻿@using TrustlessClientWeb2.Models
+@using TrustLessModelLib
+@model Statement
+
+
+<div>
+    <h4>Make new statement.</h4>
+    <div class="row">
+        <form action="/Home/NewStatementAction" method="post">
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.MedicinOne, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.MedicinOne, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.MedicinTwo, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.MedicinTwo, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value="Submit statement" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+    <hr />
+</div>
+

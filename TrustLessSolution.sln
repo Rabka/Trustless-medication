@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustLessAPI", "TrustLessAPI\TrustLessAPI\TrustLessAPI.csproj", "{DD839D8D-5BE2-45F7-84BE-7262BF7C0227}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiChainLib.Harness", "MultichainLib.Harness\MultiChainLib.Harness.csproj", "{E59E905D-1601-4B15-A6E5-ACE8FD89E1DB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustlessClientWeb", "TrustlessClientWeb\TrustlessClientWeb.csproj", "{B85F0D2E-8CAF-4927-A648-421C99EB2AFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustLessModelLib", "TrustLessModelLib\TrustLessModelLib.csproj", "{233CBB51-09A0-4DF1-9D08-A305F6C1794D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustlessClientWeb2", "TrustlessClientWeb2\TrustlessClientWeb2.csproj", "{3FEF865A-5103-4FBA-AC7E-2179006493B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{B85F0D2E-8CAF-4927-A648-421C99EB2AFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B85F0D2E-8CAF-4927-A648-421C99EB2AFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B85F0D2E-8CAF-4927-A648-421C99EB2AFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{233CBB51-09A0-4DF1-9D08-A305F6C1794D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{233CBB51-09A0-4DF1-9D08-A305F6C1794D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{233CBB51-09A0-4DF1-9D08-A305F6C1794D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{233CBB51-09A0-4DF1-9D08-A305F6C1794D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FEF865A-5103-4FBA-AC7E-2179006493B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FEF865A-5103-4FBA-AC7E-2179006493B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FEF865A-5103-4FBA-AC7E-2179006493B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FEF865A-5103-4FBA-AC7E-2179006493B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
