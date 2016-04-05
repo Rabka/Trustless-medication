@@ -15,9 +15,9 @@ namespace TrustlessClientWeb2.Models
 {
     public class Repository
     {
-        static ConcurrentDictionary<string, Statement> _DebatableStatements = new ConcurrentDictionary<string, Statement>();
+        public ConcurrentDictionary<int, Statement> _DebatableStatements = new ConcurrentDictionary<int, Statement>();
 
-        private readonly HttpClient _client = new HttpClient { BaseAddress = new Uri("http://wattosshop.azurewebsites.net/") };
+        private readonly HttpClient _client = new HttpClient { BaseAddress = new Uri("http://10.26.50.194:8080/") };
 
         public Repository()
         {
@@ -40,32 +40,59 @@ namespace TrustlessClientWeb2.Models
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(S));
             HttpResponseMessage response = await _client.PostAsync("CreateStatement", content);
-
-            //TODO give response
+            
         }
 
-        public async Task<List<Statement>> GetDebatableStatements()
+        /// <summary>
+        /// Gets the list of statments this user can judge
+        /// </summary>
+        /// <returns>A list of debatable statments</returns>
+        public async Task<IEnumerable<Statement>> GetDebatableStatements()
         {
             //TODO ask server for debateble statements
 
-            HttpResponseMessage response = await _client.GetAsync("");
+            HttpResponseMessage response = await _client.GetAsync("Statement/GetStatements");
 
             if(response.IsSuccessStatusCode)
             {
-                var stream = await response.Content.ReadAsStreamAsync();
-                stream.Seek(0, SeekOrigin.Begin);
-                BinaryFormatter formatter = new BinaryFormatter();
-                List<Statement> statementList = (List<Statement>) formatter.Deserialize(stream);
+                var stream = await response.Content.ReadAsStringAsync();
+                List<Statement> statementList = JsonConvert.DeserializeObject<List<Statement>>(stream);
 
                 return statementList;
             }
 
-            return new List<Statement>();
+            List<Statement> failList = new List<Statement>();
+            Statement failStatement = new Statement() { Person = new Person(), MedicinOne = "No", MedicinTwo = "successefull", Description = "response" };
+            failList.Add(failStatement);
+
+            return failList;
         }
 
-        public void ReplyDebatableStatement(Statement item, bool reply)
+        /// <summary>
+        /// Reply on a debatable statement
+        /// </summary>
+        /// <param name="item">the debatable statement</param>
+        /// <param name="thisPerson">this client</param>
+        /// <param name="reply">if the statement is true</param>
+        /// <returns></returns>
+        public async Task ReplyDebatableStatement(Statement item, Person thisPerson, bool reply)
         {
-            //TODO reply on a debateble statement
+            StringContent content = new StringContent(JsonConvert.SerializeObject(item) + "," + JsonConvert.SerializeObject(thisPerson));
+            HttpResponseMessage response = await _client.PostAsync("Recommend?trusted=" + reply.ToString(), content);
+
+            System.Web.HttpContext.Current.Response.Write("<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"Hello this is an Alert\")</SCRIPT>");
+
+            if (response.IsSuccessStatusCode)
+            {
+                Statement s;
+                _DebatableStatements.TryRemove(item.Id, out s);
+            }
+            else
+            {
+                
+                System.Web.HttpContext.Current.Response.Write("<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"Hello this is an Alert\")</SCRIPT>");
+                //ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert( test );", true);
+            }
         }
 
         public int GetS()

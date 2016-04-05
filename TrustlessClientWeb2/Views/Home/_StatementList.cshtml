@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TrustLessModelLib.Statement>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MedicinOne)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MedicinTwo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MedicinOne)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MedicinTwo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.ActionLink("True", "Recommend", new { item, recommend = true }) |
+            @Html.ActionLink("False", "Recommend", new { item, recommend = false })
+        </td>
+    </tr>
+}
+
+</table>
