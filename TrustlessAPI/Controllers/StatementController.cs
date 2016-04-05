@@ -7,8 +7,7 @@ using TrustLessAPI.Models;
 using Newtonsoft.Json;
 using MySql.Data.MySqlClient;
 using System.Net;
-using TrustLessAPI.Storage;
-using TrustLessModelLib; 
+using TrustLessAPI.Storage; 
 
 namespace TrustlessAPI.Controllers
 {
@@ -24,7 +23,16 @@ namespace TrustlessAPI.Controllers
 			using (DataContext context = new DataContext())
 			{
 				int maxVotings = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["MaxVotings"]);
-				return Content ( JsonConvert.SerializeObject(context.Statements.Where(x=> context.Recommendations.Count(y => y.StatementId== x.Id && y.Transaction != null) >= maxVotings ).ToList())); 
+				return Content ( JsonConvert.SerializeObject(context.Statements.Where(x=> context.Recommendations.Count(y => y.StatementId== x.Id) < maxVotings ).ToList())); 
+			} 
+		}
+
+		public ActionResult SearchStatement(string medicinOne, string medicinTwo)
+		{
+			using (DataContext context = new DataContext())
+			{
+				int maxVotings = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["MaxVotings"]);
+				return Content ( JsonConvert.SerializeObject(context.Statements.Where(x=> context.Recommendations.Count(y => y.StatementId== x.Id) >= maxVotings && context.Recommendations.Count(y => y.StatementId== x.Id && y.IsRecommended) >= maxVotings / 2 ).ToList())); 
 			} 
 		}
 
