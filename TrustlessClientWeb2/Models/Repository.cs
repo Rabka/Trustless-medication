@@ -16,6 +16,7 @@ namespace TrustlessClientWeb2.Models
     public class Repository
     {
         public ConcurrentDictionary<int, Statement> _DebatableStatements = new ConcurrentDictionary<int, Statement>();
+        public List<Statement> _Recommendations = new List<Statement>();
 
         private readonly HttpClient _client = new HttpClient { BaseAddress = new Uri("http://10.26.50.194:8080/") };
 
@@ -41,6 +42,7 @@ namespace TrustlessClientWeb2.Models
             StringContent content = new StringContent(JsonConvert.SerializeObject(S));
             HttpResponseMessage response = await _client.PostAsync("CreateStatement", content);
             
+
         }
 
         /// <summary>

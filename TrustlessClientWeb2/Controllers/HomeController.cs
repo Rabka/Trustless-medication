@@ -22,6 +22,17 @@ namespace TrustlessClientWeb2.Controllers
             //return View("Index", new List<Statement>().AsEnumerable());
         }
 
+        public ActionResult RecommendationList()
+        {
+            return View("RecommendationList", Repo._Recommendations.AsEnumerable<Statement>());
+        }
+
+        public ActionResult Recommend()
+        {
+
+            return RecommendationList();
+        }
+
         public async Task<ActionResult> NewStatementAction(string medicinOne, string medicinTwo, string description)
         {
             await Repo.SendNewStatment(medicinOne, medicinTwo, description);
