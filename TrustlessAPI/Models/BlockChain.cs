@@ -20,7 +20,7 @@ namespace TrustLessAPI.Storage
 			client.ImportAddress(person.PublicKey); 
 		}
 
-        public static void MakeRecommendation(DataContext db, Recommendation recommendation)
+        public static void MakeRecommendation(DataContext db, TrustLessModelLib.Recommendation recommendation)
         {
 			//Make RPC connection to servernode 
 			string chainName = System.Configuration.ConfigurationManager.AppSettings["ChainName"];
@@ -36,12 +36,11 @@ namespace TrustLessAPI.Storage
                 Vout = resp.vout
             };
 
-			db.Recommendations.Add (recommendation);
 			db.SaveChanges ();
         }
 
 
-		public static void IssueS(Recommendation recommendation)
+		public static void IssueS(TrustLessModelLib.Recommendation recommendation)
         {
 			//Make RPC connection to servernode 
 			Dictionary<string,object> txVouts = new Dictionary<string, object>();

@@ -23,8 +23,10 @@ namespace TrustLessModelLib
 
         public bool IsRecommended { get; set; }
 
-		[DatabaseGenerated(DatabaseGeneratedOption.None)] //REMEMBER THAT YOU ARE MAKING RECOMMEND AND IT CANNOT INSERT THIS AS NULL
+		[DatabaseGenerated(DatabaseGeneratedOption.None)]
         public ReservedTransaction Transaction { get; set; }
+
+		public string Description { get; set; }
 
     }
 }

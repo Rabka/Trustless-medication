@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using MySql.Data.MySqlClient;
 using System.Net;
 using TrustLessAPI.Storage; 
+using TrustLessModelLib;
 
 namespace TrustlessAPI.Controllers
 {
@@ -32,12 +33,20 @@ namespace TrustlessAPI.Controllers
 			using (DataContext context = new DataContext())
 			{
 				int maxVotings = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["MaxVotings"]);
-				return Content ( JsonConvert.SerializeObject(context.Statements.Where(x=> context.Recommendations.Count(y => y.StatementId== x.Id) >= maxVotings && context.Recommendations.Count(y => y.StatementId== x.Id && y.IsRecommended) >= maxVotings / 2 ).ToList())); 
+				return Content ( JsonConvert.SerializeObject(context.Statements.Where (x => context.Recommendations.Count (y => y.StatementId == x.Id) >= maxVotings && context.Recommendations.Count (y => y.StatementId == x.Id && y.IsRecommended) >= maxVotings / 2))); 
+			} 
+		}
+
+		public ActionResult GetRecommendations(int statement)
+		{
+			using (DataContext context = new DataContext())
+			{
+				return Content ( JsonConvert.SerializeObject(context.Recommendations.Where (x => x.StatementId == statement).ToList())); 
 			} 
 		}
 
 		[HttpPost]
-		public ActionResult CreateNewStatement(Statement statement)
+		public ActionResult CreateNewStatement(TrustLessModelLib.Statement statement)
 		{ 
 			using (DataContext context = new DataContext())
 			{
@@ -90,7 +99,7 @@ namespace TrustlessAPI.Controllers
 				var person =
 					context.Persons.FirstOrDefault(x => x.Username == username);
 				
-				recommendation = new Recommendation(){ Person = person, Statement = statementObject, IsRecommended = trust, Transaction = null};
+				recommendation = new TrustLessModelLib.Recommendation(){ Person = person, Statement = statementObject, IsRecommended = trust, Transaction = null};
 
 				//This will fail if a racecondition was to add two recommendations (given that our key assignment of the table ensures only one of the same recommendation exist).
 				context.Recommendations.Add (recommendation);
@@ -105,7 +114,7 @@ namespace TrustlessAPI.Controllers
 			}
 		}
 
-		private bool IsStatementRecommendationsComplete(DataContext context,Statement statement)
+		private bool IsStatementRecommendationsComplete(DataContext context,TrustLessModelLib.Statement statement)
 		{
 			var recommendationAmount =
 				context.Recommendations.Count(x => x.StatementId== statement.Id && x.Transaction != null);
@@ -114,7 +123,7 @@ namespace TrustlessAPI.Controllers
 			return recommendationAmount >= maxVotings;
 		}
 
-		private void IssueTrustForStatement(DataContext context,Statement statement)
+		private void IssueTrustForStatement(DataContext context,TrustLessModelLib.Statement statement)
 		{
 			var recommendations =
 				context.Recommendations.Where(x => x.StatementId== statement.Id && x.Transaction != null).ToList();
