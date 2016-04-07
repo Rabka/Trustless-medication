@@ -53,6 +53,12 @@ namespace TrustlessClientWeb2.Models
             }
         }
 
+        /// <summary>
+        /// When given 2 medicin, put at rekomendation in _Statements if ther is one
+        /// </summary>
+        /// <param name="medicinOne"></param>
+        /// <param name="medicinTwo"></param>
+        /// <returns></returns>
         public async Task GetRecommendation(string medicinOne, string medicinTwo)
         {
             HttpResponseMessage response = await _client.GetAsync("Statement/SearchStatement?medicinOne=" + medicinOne + "&medicinTwo=" + medicinTwo);
