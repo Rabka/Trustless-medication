@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{22E5A8ED-65A5-45DF-AAD0-76EED5F65AA1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>MultichainCliLib</RootNamespace>
+    <AssemblyName>MultichainCliLib</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Interfaces\IRequest.cs" />
+    <Compile Include="Interfaces\IResponse.cs" />
+    <Compile Include="MultichainClient.cs" />
+    <Compile Include="Requests\ListAssetsRequest.cs" />
+    <Compile Include="Responses\ListAssetsResponse.cs" />
+    <Compile Include="Requests\PrepareLockUnspentRequest.cs" />
+    <Compile Include="Responses\PrepareLockUnspentResponse.cs" />
+    <Compile Include="Requests\SendToAddressRequest.cs" />
+    <Compile Include="Responses\SendToAddressResponse.cs" />
+    <Compile Include="Requests\LockUnspentRequest.cs" />
+    <Compile Include="Responses\LockUnspentResponse.cs" />
+    <Compile Include="Responses\GetNewAddressResponse.cs" />
+    <Compile Include="Requests\GetNewAddressRequest.cs" />
+    <Compile Include="Requests\CreateRawTransactionRequest.cs" />
+    <Compile Include="Responses\CreateRawTransactionResponse.cs" />
+    <Compile Include="Requests\AppendRawChangeRequest.cs" />
+    <Compile Include="Responses\AppendRawChangeResponse.cs" />
+    <Compile Include="Requests\GetAddressesRequest.cs" />
+    <Compile Include="Responses\GetAddressesResponse.cs" />
+    <Compile Include="Requests\SignRawTransactionRequest.cs" />
+    <Compile Include="Responses\SignRawTransactionResponse.cs" />
+    <Compile Include="Responses\SendRawTransactionResponse.cs" />
+    <Compile Include="Requests\SendRawTransactionRequest.cs" />
+    <Compile Include="Responses\ImportAddressResponse.cs" />
+    <Compile Include="Requests\ImportAddressRequest.cs" />
+    <Compile Include="Responses\GetAddressbalancesResponse.cs" />
+    <Compile Include="Requests\GetAddressbalancesRequest.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Responses\" />
+    <Folder Include="Requests\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
