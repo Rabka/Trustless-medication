@@ -1,35 +1,47 @@
-﻿@model IEnumerable<TrustLessModelLib.Statement>
+﻿
+@model IEnumerable<TrustLessModelLib.Statement>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.MedicinOne)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MedicinTwo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th></th>
-    </tr>
+<p>
+    <h4>Give a recommedation:</h4>
+    @Html.ActionLink("Refesh", "Index", "Home")
+</p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicinOne)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicinTwo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                True?    |    Your reason?    |    Submit?
+            </th>
+        </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.MedicinOne)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MedicinTwo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("True", "Recommend", new { item, recommend = true }) |
-            @Html.ActionLink("False", "Recommend", new { item, recommend = false })
-        </td>
-    </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
 
-</table>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MedicinOne)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MedicinTwo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <form action="/Home/Recommend" method="post">
+                        @Html.Hidden("id", item.Id)
+                        @Html.CheckBox("recommend")
+                        @Html.TextBox("description") 
+                        <input type="submit" value="Submit" class="btn btn-default" />
+                    </form>
+                </td>
+            </tr>
+        }
+        </table>

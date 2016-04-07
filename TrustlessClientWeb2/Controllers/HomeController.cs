@@ -24,12 +24,12 @@ namespace TrustlessClientWeb2.Controllers
 
         public ActionResult RecommendationList()
         {
-            return View("RecommendationList", Repo._Recommendations.AsEnumerable<Statement>());
+            return View("RecommendationList", new Tuple<IEnumerable<TrustLessModelLib.Statement>, Dictionary<int, List<TrustLessModelLib.Recommendation>>>(Repo._Statements.AsEnumerable<Statement>(), Repo._StatementsRecommendations));
         }
 
-        public ActionResult Recommend()
+        public async Task<ActionResult> GetRecommendation(string medicinOne, string medicinTwo)
         {
-
+            await Repo.GetRecommendation(medicinOne, medicinTwo);
             return RecommendationList();
         }
 
@@ -40,10 +40,11 @@ namespace TrustlessClientWeb2.Controllers
             return await Index();
         }
 
-        public async Task<ActionResult> Recommend(Statement item, bool recommend)
+        public async Task<ActionResult> Recommend(int id, bool recommend, string description)
         {
-            Person testP = new Person { Id = 80, PublicKey = "1", ReservedServerWalletKey = "1", Username = "testPerson" };
-            await Repo.ReplyDebatableStatement(item, testP, recommend);
+            if (description == null)
+                description = "";
+            await Repo.ReplyDebatableStatement(id, recommend, description);
 
             return await Index();
         }

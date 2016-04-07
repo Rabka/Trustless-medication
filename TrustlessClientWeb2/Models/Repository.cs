@@ -16,7 +16,9 @@ namespace TrustlessClientWeb2.Models
     public class Repository
     {
         public ConcurrentDictionary<int, Statement> _DebatableStatements = new ConcurrentDictionary<int, Statement>();
-        public List<Statement> _Recommendations = new List<Statement>();
+        public List<Statement> _Statements = new List<Statement>();
+        public Dictionary<int, List<Recommendation>> _StatementsRecommendations = new Dictionary<int, List<Recommendation>>();
+        public Person _thisPerson;
 
         private readonly HttpClient _client = new HttpClient { BaseAddress = new Uri("http://10.26.50.194:8080/") };
 
@@ -25,6 +27,8 @@ namespace TrustlessClientWeb2.Models
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
             //_client.DefaultRequestHeaders.Add("Authorization", Repository.Token);
+
+            _thisPerson = new Person { Username = "Patr0805"};
         }
 
         /// <summary>
@@ -36,12 +40,60 @@ namespace TrustlessClientWeb2.Models
         /// <returns></returns>
         public async Task SendNewStatment(string medicinOne, string medicinTwo, string description)
         {
-            Person p = new Person();
-            Statement S = new Statement() { Person = p, MedicinOne = medicinOne, MedicinTwo = medicinTwo, Description = description };
+            Statement S = new Statement() { Person = _thisPerson, MedicinOne = medicinOne, MedicinTwo = medicinTwo, Description = description };
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(S));
-            HttpResponseMessage response = await _client.PostAsync("CreateStatement", content);
-            
+            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue( "application/json");
+            HttpResponseMessage response = await _client.PostAsync("Statement/CreateNewStatement", content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                System.Web.HttpContext.Current.Response.Write(
+                    "<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"Make new statement failed: " + response.StatusCode + "\")</SCRIPT>");
+            }
+        }
+
+        public async Task GetRecommendation(string medicinOne, string medicinTwo)
+        {
+            HttpResponseMessage response = await _client.GetAsync("Statement/SearchStatement?medicinOne=" + medicinOne + "&medicinTwo=" + medicinTwo);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var stream = await response.Content.ReadAsStringAsync();
+                List<Statement> statementList = JsonConvert.DeserializeObject<List<Statement>>(stream);
+                _Statements = statementList;
+
+                if (statementList.Count == 0)
+                {
+                    System.Web.HttpContext.Current.Response.Write(
+                        "<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"No recommendation was found.\")</SCRIPT>");
+                }
+                else
+                {
+                    foreach (Statement s in _Statements)
+                    {
+                        HttpResponseMessage response2 = await _client.GetAsync("Statement/GetRecommendations?statement=" + s.Id);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var stream2 = await response2.Content.ReadAsStringAsync();
+                            List<Recommendation> recommendationList = JsonConvert.DeserializeObject<List<Recommendation>>(stream2);
+                            _StatementsRecommendations.Add(s.Id, recommendationList);
+                        }
+                        else
+                        {
+                            System.Web.HttpContext.Current.Response.Write(
+                                "<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"Search recommendation failed: " + response2.StatusCode + "\")</SCRIPT>");
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                System.Web.HttpContext.Current.Response.Write(
+                    "<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"Search statement failed: " + response.StatusCode + "\")</SCRIPT>");
+            }
 
         }
 
@@ -53,7 +105,7 @@ namespace TrustlessClientWeb2.Models
         {
             //TODO ask server for debateble statements
 
-            HttpResponseMessage response = await _client.GetAsync("Statement/GetStatements");
+            HttpResponseMessage response = await _client.GetAsync("Statement/GetStatements?username=" + _thisPerson.Username);
 
             if(response.IsSuccessStatusCode)
             {
@@ -62,12 +114,17 @@ namespace TrustlessClientWeb2.Models
 
                 return statementList;
             }
+            else
+            {
+                System.Web.HttpContext.Current.Response.Write(
+                    "<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"Make new statement failed: " + response.StatusCode + "\")</SCRIPT>");
 
-            List<Statement> failList = new List<Statement>();
-            Statement failStatement = new Statement() { Person = new Person(), MedicinOne = "No", MedicinTwo = "successefull", Description = "response" };
-            failList.Add(failStatement);
+                List<Statement> failList = new List<Statement>();
+                Statement failStatement = new Statement() { Person = new Person(), MedicinOne = "No", MedicinTwo = "successefull", Description = "response" };
+                failList.Add(failStatement);
 
-            return failList;
+                return failList;
+            }
         }
 
         /// <summary>
@@ -77,25 +134,29 @@ namespace TrustlessClientWeb2.Models
         /// <param name="thisPerson">this client</param>
         /// <param name="reply">if the statement is true</param>
         /// <returns></returns>
-        public async Task ReplyDebatableStatement(Statement item, Person thisPerson, bool reply)
+        public async Task ReplyDebatableStatement(int itemId, bool reply, string description)
         {
-            StringContent content = new StringContent(JsonConvert.SerializeObject(item) + "," + JsonConvert.SerializeObject(thisPerson));
-            HttpResponseMessage response = await _client.PostAsync("Recommend?trusted=" + reply.ToString(), content);
-
-            System.Web.HttpContext.Current.Response.Write("<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"Hello this is an Alert\")</SCRIPT>");
+            StringContent content = new StringContent(description);
+            HttpResponseMessage response = await _client.PostAsync(
+                    "Statement/Recommend?trust=" + reply.ToString() + 
+                    "&statement=" + itemId + 
+                    "&username=" + _thisPerson.Username
+                    , content);
 
             if (response.IsSuccessStatusCode)
             {
                 Statement s;
-                _DebatableStatements.TryRemove(item.Id, out s);
+                _DebatableStatements.TryRemove(itemId, out s);
             }
             else
             {
-                
-                System.Web.HttpContext.Current.Response.Write("<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"Hello this is an Alert\")</SCRIPT>");
+
+                System.Web.HttpContext.Current.Response.Write("<SCRIPT LANGUAGE=\"\"JavaScript\"\">alert(\"Recommendation failed: " + response.StatusCode + "\")</SCRIPT>");
                 //ClientScript.RegisterStartupScript(this.GetType(), "myalert", "alert( test );", true);
             }
         }
+
+
 
         public int GetS()
         {
