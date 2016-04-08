@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{F3152003-CED9-4DA3-940D-ED13A4271AFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultichainCliLib", "MultichainCliLib\MultichainCliLib.csproj", "{22E5A8ED-65A5-45DF-AAD0-76EED5F65AA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustlessAPI", "TrustlessAPI\TrustlessAPI.csproj", "{169B9A6F-5B50-4F81-81BA-8D3EF982F5C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrustLessModelLib", "TrustLessModelLib\TrustLessModelLib.csproj", "{233CBB51-09A0-4DF1-9D08-A305F6C1794D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{169B9A6F-5B50-4F81-81BA-8D3EF982F5C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{169B9A6F-5B50-4F81-81BA-8D3EF982F5C4}.Debug|x86.Build.0 = Debug|Any CPU
+		{169B9A6F-5B50-4F81-81BA-8D3EF982F5C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{169B9A6F-5B50-4F81-81BA-8D3EF982F5C4}.Release|x86.Build.0 = Release|Any CPU
+		{22E5A8ED-65A5-45DF-AAD0-76EED5F65AA1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{22E5A8ED-65A5-45DF-AAD0-76EED5F65AA1}.Debug|x86.Build.0 = Debug|Any CPU
+		{22E5A8ED-65A5-45DF-AAD0-76EED5F65AA1}.Release|x86.ActiveCfg = Release|Any CPU
+		{22E5A8ED-65A5-45DF-AAD0-76EED5F65AA1}.Release|x86.Build.0 = Release|Any CPU
+		{233CBB51-09A0-4DF1-9D08-A305F6C1794D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{233CBB51-09A0-4DF1-9D08-A305F6C1794D}.Debug|x86.Build.0 = Debug|Any CPU
+		{233CBB51-09A0-4DF1-9D08-A305F6C1794D}.Release|x86.ActiveCfg = Release|Any CPU
+		{233CBB51-09A0-4DF1-9D08-A305F6C1794D}.Release|x86.Build.0 = Release|Any CPU
+		{F3152003-CED9-4DA3-940D-ED13A4271AFC}.Debug|x86.ActiveCfg = Debug|x86
+		{F3152003-CED9-4DA3-940D-ED13A4271AFC}.Debug|x86.Build.0 = Debug|x86
+		{F3152003-CED9-4DA3-940D-ED13A4271AFC}.Release|x86.ActiveCfg = Release|x86
+		{F3152003-CED9-4DA3-940D-ED13A4271AFC}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = TrustlessAPI\TrustlessAPI.csproj
+	EndGlobalSection
+EndGlobal
