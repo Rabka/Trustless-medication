@@ -25,6 +25,11 @@ namespace TrustlessAPI.Controllers
 			using (DataContext context = new DataContext())
 			{
 				int maxVotings = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["MaxVotings"]);
+				double initialTrust = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["InitialTrust"]);
+				if (CalculateBayesianModelTrust(context.Persons.First(x => x.Username == username)) == initialTrust)
+					return Content ( JsonConvert.SerializeObject(context.Statements.Include("Person").Where(x=> context.Recommendations.Count(y => y.StatementId== x.Id) < maxVotings &&
+						!context.Recommendations.Any(y=> y.PersonUsername == username && y.StatementId == x.Id) && context.Statements.Any(y => y.Person.Username == x.Person.Username && context.Recommendations.Count(z => z.StatementId== y.Id && z.IsRecommended) >= maxVotings / 2)).ToList())); 
+
 				return Content ( JsonConvert.SerializeObject(context.Statements.Include("Person").Where(x=> context.Recommendations.Count(y => y.StatementId== x.Id) < maxVotings &&
 					!context.Recommendations.Any(y=> y.PersonUsername == username && y.StatementId == x.Id)).ToList())); 
 			} 
@@ -155,9 +160,9 @@ namespace TrustlessAPI.Controllers
 
 		private double CalculateBayesianModelTrust(Person person)
 		{
-			double initialTrust = 0.2;
-			double trustProblabilityOfGoodPerson = 0.8;
-			double nonTrustProblabilityOfBadPerson = 1.5;
+			double initialTrust = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["InitialTrust"]);
+			double trustProblabilityOfGoodPerson = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["TrustProblabilityOfGoodPerson"]);
+			double nonTrustProblabilityOfBadPerson = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["ŃonTrustProblabilityOfBadPerson"]);
 
 			double[] sfFloats = GetSVFromBlockChain(person);
 
