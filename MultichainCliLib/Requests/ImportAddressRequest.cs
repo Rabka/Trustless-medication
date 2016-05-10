@@ -1,7 +1,6 @@
-﻿using MultichainCliLib.Interfaces;
-using MultichainCliLib.Responses;
+﻿using System;
 
-namespace MultichainCliLib.Requests
+namespace MultichainCliLib
 {
 	public class ImportAddressRequest : IRequest
 	{

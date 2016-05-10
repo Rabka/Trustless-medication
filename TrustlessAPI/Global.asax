@@ -1,2 +1,2 @@
-﻿<%@ Application Inherits="TrustLessAPI.MvcApplication" %>
+<%@ Application Inherits="TrustlessAPI.MvcApplication" %>
 

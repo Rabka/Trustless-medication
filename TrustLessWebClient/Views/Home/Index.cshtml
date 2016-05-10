@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        <section id="socialLoginForm">
+            @Html.Partial("_UserInfoPartial")
+        </section>
+    </div>
+    <div class="col-md-10">
+        <section id="socialLoginForm">
+            @Html.Partial("_MakeNewStatementPartial")
+        </section>
+        <section id="socialLoginForm">
+            @Html.Partial("_StatementList")
+        </section>
+    </div>
+</div>

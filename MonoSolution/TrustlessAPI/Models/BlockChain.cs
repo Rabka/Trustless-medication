@@ -6,6 +6,7 @@ using System.Web;
 using MultichainCliLib;
 using TrustLessAPI.Models;
 using TrustLessModelLib;
+using System.Web.Configuration;
 
 namespace TrustLessAPI.Storage
 {
@@ -14,7 +15,7 @@ namespace TrustLessAPI.Storage
 		public static void ImportPublicKeyToWallet(Person person)
 		{
 			//Make RPC connection to servernode 
-			string chainName = System.Configuration.ConfigurationManager.AppSettings["ChainName"];
+			string chainName = WebConfigurationManager.AppSettings["ChainName"];
 			MultiChainClient client = new MultiChainClient(chainName); 
 			client.ImportAddress(person.PublicKey); 
 		}
@@ -22,7 +23,7 @@ namespace TrustLessAPI.Storage
         public static void MakeRecommendation(DataContext db, TrustLessModelLib.Recommendation recommendation)
         {
 			//Make RPC connection to servernode 
-			string chainName = System.Configuration.ConfigurationManager.AppSettings["ChainName"];
+			string chainName = WebConfigurationManager.AppSettings["ChainName"];
 			MultiChainClient client = new MultiChainClient(chainName);
             Dictionary<string,int> dictionary = new Dictionary<string, int>();
             dictionary.Add("F",1);
@@ -41,6 +42,8 @@ namespace TrustLessAPI.Storage
 
 		public static void IssueS(TrustLessModelLib.Recommendation recommendation)
         {
+			try
+			{
 			//Make RPC connection to servernode 
 			Dictionary<string,object> txVouts = new Dictionary<string, object>();
 			txVouts.Add("txid",recommendation.Transaction.Tx);
@@ -48,19 +51,21 @@ namespace TrustLessAPI.Storage
 
 			Dictionary<string,int> amount = new Dictionary<string, int>(); 
 			amount.Add("S",1);
-
-			string chainName = System.Configuration.ConfigurationManager.AppSettings["ChainName"];
+				 
+				string chainName = WebConfigurationManager.AppSettings["ChainName"];
+				string multichainPublicKey = WebConfigurationManager.AppSettings["MultichainPublicKey"];
 			MultiChainClient client = new MultiChainClient(chainName);
 			var resp = client.CreateRawTransaction (recommendation.Person.PublicKey, txVouts, amount);
-			var respAddresses = client.GetAddresses ();
-			var rootPublicKey = respAddresses.Addresses.First ();
-			var respAppendRawChange = client.AppendRawChange (resp.Hex, rootPublicKey);
+				var respAppendRawChange = client.AppendRawChange (resp.Hex, multichainPublicKey);
 			var respSignTransaction = client.SignRawTransaction (respAppendRawChange.Hex);
 			if (respSignTransaction.complete) {
 				var respSendRawTransaction = client.SendRawTransaction (respSignTransaction.hex);
 				if (!String.IsNullOrEmpty (respSendRawTransaction.TransactionId))
 					client.LockUnspent (true, txVouts);
 			} 
+			}
+			catch (Exception ex) {
+			}
 
         } 
 
@@ -73,34 +78,38 @@ namespace TrustLessAPI.Storage
         }
 
 		public static void IssueF(Recommendation recommendation)
-        {
-			//Make RPC connection to servernode 
-			Dictionary<string,object> txVouts = new Dictionary<string, object>();
-			txVouts.Add("txid",recommendation.Transaction.Tx);
-			txVouts.Add("vout",recommendation.Transaction.Vout);
+		{
+			try
+			{
+				//Make RPC connection to servernode 
+				Dictionary<string,object> txVouts = new Dictionary<string, object>();
+				txVouts.Add("txid",recommendation.Transaction.Tx);
+				txVouts.Add("vout",recommendation.Transaction.Vout);
 
-			Dictionary<string,int> amount = new Dictionary<string, int>(); 
-			amount.Add("F",1);
+				Dictionary<string,int> amount = new Dictionary<string, int>(); 
+				amount.Add("F",1);
 
-			string chainName = System.Configuration.ConfigurationManager.AppSettings["ChainName"];
-			MultiChainClient client = new MultiChainClient(chainName);
-			var resp = client.CreateRawTransaction (recommendation.Person.PublicKey, txVouts, amount);
-			var respAddresses = client.GetAddresses ();
-			var rootPublicKey = respAddresses.Addresses.First ();
-			var respAppendRawChange = client.AppendRawChange (resp.Hex, rootPublicKey);
-			var respSignTransaction = client.SignRawTransaction (respAppendRawChange.Hex);
-			if (respSignTransaction.complete) {
-				var respSendRawTransaction = client.SendRawTransaction (respSignTransaction.hex);
-				if (!String.IsNullOrEmpty (respSendRawTransaction.TransactionId))
-					client.LockUnspent (true, txVouts);
-			} 
-            
+				string chainName = WebConfigurationManager.AppSettings["ChainName"];
+				string multichainPublicKey = WebConfigurationManager.AppSettings["MultichainPublicKey"];
+				MultiChainClient client = new MultiChainClient(chainName);
+				var resp = client.CreateRawTransaction (recommendation.Person.PublicKey, txVouts, amount);
+				var respAppendRawChange = client.AppendRawChange (resp.Hex, multichainPublicKey);
+				var respSignTransaction = client.SignRawTransaction (respAppendRawChange.Hex);
+				if (respSignTransaction.complete) {
+					var respSendRawTransaction = client.SendRawTransaction (respSignTransaction.hex);
+					if (!String.IsNullOrEmpty (respSendRawTransaction.TransactionId))
+						client.LockUnspent (true, txVouts);
+				} 
+			}
+			catch (Exception ex) {
+			}
+
         }
 
 		public static AddressBalance[] GetPersonBalance(Person person)
 		{
 			//Make RPC connection to servernode  
-			string chainName = System.Configuration.ConfigurationManager.AppSettings["ChainName"];
+			string chainName = WebConfigurationManager.AppSettings["ChainName"];
 			MultiChainClient client = new MultiChainClient(chainName);
 			var resp = client.GetAddressbalances (person.PublicKey); 
 			return resp.Balances;

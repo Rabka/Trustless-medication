@@ -1,4 +1,6 @@
-﻿namespace MultichainCliLib.Interfaces
+﻿using System;
+
+namespace MultichainCliLib
 {
 	public interface IRequest
 	{ 

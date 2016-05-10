@@ -1,6 +1,6 @@
-﻿using MultichainCliLib.Interfaces;
+﻿using System;
 
-namespace MultichainCliLib.Responses
+namespace MultichainCliLib
 {
 	public class SendRawTransactionResponse : IResponse
 	{

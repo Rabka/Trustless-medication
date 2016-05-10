@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MultichainCliLib.Interfaces;
 using MultichainCliLib.Responses;
 using Newtonsoft.Json;
 

@@ -1,8 +1,7 @@
-﻿using MultichainCliLib.Interfaces;
-using MultichainCliLib.Responses;
+﻿using System;
 using Newtonsoft.Json;
 
-namespace MultichainCliLib.Requests
+namespace MultichainCliLib
 {
 	public class SignRawTransactionRequest : IRequest
 	{

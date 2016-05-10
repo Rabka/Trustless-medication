@@ -6,7 +6,7 @@ using System.Web;
 using TrustlessAPI;
 using TrustLessAPI.Storage;
 using TrustLessModelLib;
-
+ 
 
 namespace TrustLessAPI.Models
 {
@@ -28,6 +28,7 @@ namespace TrustLessAPI.Models
         public DbSet<Person> Persons { get; set; }
 		public DbSet<Recommendation> Recommendations { get; set; }
 		public DbSet<ReservedTransaction> ReservedTransactions { get; set; }
-        public DbSet<Statement> Statements { get; set; }
+		public DbSet<Statement> Statements { get; set; }
+		public DbSet<LoginSession> LoginSessions { get; set; }
     }
 }

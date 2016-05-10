@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MultichainCliLib.Interfaces;
 using MultichainCliLib.Responses;
 
 namespace MultichainCliLib.Requests
@@ -8,11 +7,13 @@ namespace MultichainCliLib.Requests
 	public class LockUnspentRequest : IRequest
 	{ 
 		bool unlock;
-		Dictionary<string, object> txVout;
-		public LockUnspentRequest (bool unlock, Dictionary<string, object> txVout)
+		string txid;
+		int vout;
+		public LockUnspentRequest (bool unlock, string txid,int vout)
 		{
 			this.unlock = unlock;
-			this.txVout = txVout;
+			this.txid = txid;
+			this.vout = vout;
 		}
 
 		public IResponse GenerateResponse(string json)
@@ -27,12 +28,8 @@ namespace MultichainCliLib.Requests
 
 		public string GetCompleteMethodString()
 		{
-			string jsonTxString = "";
-			foreach (KeyValuePair<string,object> kv in txVout)
-			{
-				jsonTxString += string.Format (",{{\"{0}\":{1}}}",kv.Key,typeof(string) == kv.Value.GetType() ? "\"" + kv.Value + "\"" : kv.Value);
-			}
-			jsonTxString = "[" + jsonTxString.Substring (1) + "]";
+
+			string jsonTxString = "[{\"txid\":\""+txid + "\",\"vout\":"+vout + "}]";
  
 			return string.Format ("lockunspent {0} '{1}'", unlock, jsonTxString);
 		}

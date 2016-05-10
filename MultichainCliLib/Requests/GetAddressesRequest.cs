@@ -1,8 +1,8 @@
-﻿using MultichainCliLib.Interfaces;
-using MultichainCliLib.Responses;
+﻿using System;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace MultichainCliLib.Requests
+namespace MultichainCliLib
 {
 	public class GetAddressesRequest : IRequest
 	{ 

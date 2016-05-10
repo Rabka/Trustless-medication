@@ -1,5 +1,4 @@
 ﻿using System;
-using MultichainCliLib.Interfaces;
 using Newtonsoft.Json;
 using MultichainCliLib.Responses;
 
