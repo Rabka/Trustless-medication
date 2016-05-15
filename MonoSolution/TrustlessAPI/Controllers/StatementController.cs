@@ -100,7 +100,7 @@ namespace TrustlessAPI.Controllers
 			using (DataContext context = new DataContext())
 			{
 				var recommendations = context.Recommendations.Include("Person").Where (x => x.StatementId == statement).ToList ();
-				recommendations.ForEach(x => x.Person.TrustValue = CalculateBayesianModelTrust(x.Person));
+				recommendations.ForEach(x => x.Person.Reputation = CalculateBayesianModelTrust(x.Person));
 				return Content ( JsonConvert.SerializeObject(recommendations)); 
 			} 
 		}
@@ -262,10 +262,10 @@ namespace TrustlessAPI.Controllers
 		}
 
         /// <summary>
-        /// Calculates the Bayesian trust value for a given Person (user).
+        /// Calculates the Bayesian reputation value for a given Person (user).
         /// </summary>
         /// <param name="person">Person (user)</param>
-        /// <returns>double trust value</returns>
+        /// <returns>double reputation value</returns>
 		private double CalculateBayesianModelTrust(Person person)
 		{
 			double initialTrust = Convert.ToDouble(WebConfigurationManager.AppSettings["InitialTrust"]);
@@ -274,13 +274,13 @@ namespace TrustlessAPI.Controllers
 
             double[] sfFloats = GetSFFromBlockChain(person);
 
-			double trustValue =  (initialTrust*Math.Pow(trustProblabilityOfGoodPerson, sfFloats[0])*
+			double reputation =  (initialTrust*Math.Pow(trustProblabilityOfGoodPerson, sfFloats[0])*
 			        Math.Pow(1 - trustProblabilityOfGoodPerson, sfFloats[1]))/
 				(initialTrust*Math.Pow(trustProblabilityOfGoodPerson, sfFloats[0])*
 				 Math.Pow(1 - trustProblabilityOfGoodPerson, sfFloats[1]) +
 				 (1 - initialTrust)*Math.Pow(nonTrustProblabilityOfBadPerson, sfFloats[0])*
 				 Math.Pow(1 - nonTrustProblabilityOfBadPerson, sfFloats[1]));
-			return trustValue;
+            return reputation;
 		}
 
         /// <summary>
