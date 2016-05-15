@@ -5,6 +5,9 @@ using System.Web;
 
 namespace TrustLessAPI.Models
 {
+    /// <summary>
+    /// Statement model class.
+    /// </summary>
     public class Statement
     {
         public int Id { get; set; }

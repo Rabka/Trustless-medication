@@ -7,6 +7,9 @@ using System.Configuration;
 
 namespace TrustlessAPI
 {
+    /// <summary>
+    /// Entity framework configuration class to configure/setup MySQL adapter.
+    /// </summary>
 	public class MyConfiguration : DbConfiguration 
 	{ 
 		public MyConfiguration() 

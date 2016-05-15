@@ -6,6 +6,9 @@ using System.Web;
 
 namespace TrustLessAPI.Models
 {
+    /// <summary>
+    /// Person (user) model class.
+    /// </summary>
     public class Person
     {
         [Key]

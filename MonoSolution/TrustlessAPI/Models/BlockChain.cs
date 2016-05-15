@@ -11,21 +11,39 @@ using MultichainCliLib.Responses;
 
 namespace TrustLessAPI.Storage
 {
+    /// <summary>
+    /// BlockChain is a dedicated MultiChain layer between the server node and the server API. Any contact with the server node must
+    /// be executed within this class.
+    /// </summary>
     public static class BlockChain
 	{ 
+        /// <summary>
+        /// A lock object that ensures that race condition won't create a problem with issuing funds in GenerateFunds method.
+        /// The needed new assets of S_X or F_X are found by getting the list of assets in the server node. Therefore the conclusion
+        /// to issue more assets mustn't be made twice.
+        /// </summary>
 		public static Object issueLock = new object();
+
+        /// <summary>
+        /// Imports a public key to the wallet of the server node.
+        /// This allows for checking the balance of the public key.
+        /// </summary>
+        /// <param name="person"></param>
 		public static void ImportPublicKeyToWallet(Person person)
 		{
-			//Make RPC connection to servernode 
 			string chainName = WebConfigurationManager.AppSettings["ChainName"];
 			string nodeIp = WebConfigurationManager.AppSettings["NodeIp"];
 			MultiChainClient client = new MultiChainClient(chainName,nodeIp); 
 			client.ImportAddress(person.PublicKey); 
 		}
 
+        /// <summary>
+        /// Reserves/locks away one S and F asset and sets the recommendation to reference these assets.
+        /// </summary>
+        /// <param name="db">DataContext</param>
+        /// <param name="recommendation">Recommendation</param>
         public static void MakeRecommendation(DataContext db, TrustLessModelLib.Recommendation recommendation)
         {
-			//Make RPC connection to servernode 
 			string chainName = WebConfigurationManager.AppSettings["ChainName"];
 			string nodeIp = WebConfigurationManager.AppSettings["NodeIp"];
 			MultiChainClient client = new MultiChainClient(chainName,nodeIp);
@@ -40,7 +58,6 @@ namespace TrustLessAPI.Storage
 			} 
 			string lastF = lastFasset.name;
 			string lastS = lastSasset.name;
-
 
 			dictionary.Add(lastF,1);
 			dictionary.Add(lastS,1);
@@ -65,6 +82,10 @@ namespace TrustLessAPI.Storage
 			db.SaveChanges ();
         }
 
+        /// <summary>
+        /// If the balance of S_X or F_X is equals zero, a new unique asset S_X or F_X will be issued.
+        /// </summary>
+        /// <param name="client">MultichainClient</param>
 		private static void GenerateFunds(MultiChainClient client)
 		{
 			lock (issueLock) {
@@ -87,11 +108,13 @@ namespace TrustLessAPI.Storage
 			}
 		}
 
-
-		public static void IssueS(TrustLessModelLib.Recommendation recommendation)
+        /// <summary>
+        /// Issues an S or F to a user for a recommendation.
+        /// </summary>
+        /// <param name="recommendation">Recommendation</param>
+        /// <param name="rewardUser">true for S asset and false for F</param>
+		public static void Issue(TrustLessModelLib.Recommendation recommendation, bool rewardUser)
         {
-			
-			//Make RPC connection to servernode 
 				string chainName = WebConfigurationManager.AppSettings["ChainName"];
 				string nodeIp = WebConfigurationManager.AppSettings["NodeIp"];
 				MultiChainClient client = new MultiChainClient(chainName,nodeIp);
@@ -101,7 +124,7 @@ namespace TrustLessAPI.Storage
 				return;
 
 			Dictionary<string,int> amount = new Dictionary<string, int>();  
-				amount.Add(getTxOutResponse.assets.First(x => x.name.StartsWith("S_")).name,1);
+				amount.Add(getTxOutResponse.assets.First(x => x.name.StartsWith(rewardUser ? "S_" : "F_")).name,1);
 				  
 				string multichainPublicKey = WebConfigurationManager.AppSettings["MultichainPublicKey"]; 
 			var resp = client.CreateRawTransaction (recommendation.Person.PublicKey, recommendation.Transaction.Tx,recommendation.Transaction.Vout, amount);
@@ -116,6 +139,11 @@ namespace TrustLessAPI.Storage
 
         } 
 
+        /// <summary>
+        /// Converts a hex string to a byte array
+        /// </summary>
+        /// <param name="hex">string hex</param>
+        /// <returns>byte array</returns>
         public static byte[] StringToByteArray(string hex)
         {
             return Enumerable.Range(0, hex.Length)
@@ -124,38 +152,13 @@ namespace TrustLessAPI.Storage
                              .ToArray();
         }
 
-		public static void IssueF(Recommendation recommendation)
-		{
-			try
-			{
-				//Make RPC connection to servernode 
-				string chainName = WebConfigurationManager.AppSettings["ChainName"];
-				string nodeIp = WebConfigurationManager.AppSettings["NodeIp"];
-				MultiChainClient client = new MultiChainClient(chainName,nodeIp);
-
-				GetTxOutResponse getTxOutResponse = client.GetTxOut(recommendation.Transaction.Tx,recommendation.Transaction.Vout);
-
-
-				Dictionary<string,int> amount = new Dictionary<string, int>();  
-				amount.Add(getTxOutResponse.assets.First(x => x.name.StartsWith("F_")).name,1);
-
-				string multichainPublicKey = WebConfigurationManager.AppSettings["MultichainPublicKey"]; 
-				var resp = client.CreateRawTransaction (recommendation.Person.PublicKey, recommendation.Transaction.Tx,recommendation.Transaction.Vout, amount);
-				var respAppendRawChange = client.AppendRawChange (resp.Hex, multichainPublicKey);
-				var respSignTransaction = client.SignRawTransaction (respAppendRawChange.Hex);
-				if (respSignTransaction.complete) {
-					var respSendRawTransaction = client.SendRawTransaction (respSignTransaction.hex);
-					if (String.IsNullOrEmpty (respSendRawTransaction.TransactionId))
-						client.LockUnspent (true,  recommendation.Transaction.Tx,recommendation.Transaction.Vout);
-				} 
-			}
-			catch (Exception ex) {
-			}
-        }
-
+        /// <summary>
+        /// Gets a given person's (user) assets.
+        /// </summary>
+        /// <param name="person">person (user)</param>
+        /// <returns>AddressBalance array</returns>
 		public static AddressBalance[] GetPersonBalance(Person person)
 		{
-			//Make RPC connection to servernode  
 			string chainName = WebConfigurationManager.AppSettings["ChainName"];
 			string nodeIp = WebConfigurationManager.AppSettings["NodeIp"];
 			MultiChainClient client = new MultiChainClient(chainName,nodeIp);

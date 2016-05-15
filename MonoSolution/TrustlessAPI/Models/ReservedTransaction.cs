@@ -6,6 +6,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TrustLessAPI.Storage
 {
+    /// <summary>
+    /// ReservedTransaction model class.
+    /// Stores the result of a "PrepareLockUnspent" command to MultiChain.
+    /// </summary>
     public class ReservedTransaction
     {
 		[Key]

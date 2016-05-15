@@ -10,16 +10,26 @@ using TrustLessModelLib;
 
 namespace TrustLessAPI.Models
 {
+    /// <summary>
+    /// Entity framework database context class
+    /// </summary>
 	[DbConfigurationType(typeof(MyConfiguration))] 
     public class DataContext : DbContext
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DataContext()
 			: base(System.Configuration.ConfigurationManager.ConnectionStrings["MySqlTest"].ConnectionString)
         {			
 			Database.SetInitializer<DataContext>(new MyDbInitializer());
             Database.CommandTimeout = 90000;
         }
- 
+        
+        /// <summary>
+        /// Creates a new data context.
+        /// </summary>
+        /// <returns></returns>
         public static DataContext Create()
         {
             return new DataContext();

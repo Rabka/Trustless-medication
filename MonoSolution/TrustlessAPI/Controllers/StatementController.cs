@@ -247,15 +247,15 @@ namespace TrustlessAPI.Controllers
 			foreach (Recommendation recommendation in recommendations) {
 				if (sAmount >= fAmount) {
 					if (recommendation.IsRecommended) {
-						BlockChain.IssueS (recommendation);
+						BlockChain.Issue (recommendation,true);
 					} else {
-						BlockChain.IssueF (recommendation);
+						BlockChain.Issue (recommendation,false);
 					}
 				} else {
 					if (recommendation.IsRecommended) {
-						BlockChain.IssueF (recommendation);
+						BlockChain.Issue (recommendation,false);
 					} else {
-						BlockChain.IssueS (recommendation);
+						BlockChain.Issue (recommendation,true);
 					}
 				}
 			}

@@ -8,6 +8,9 @@ using TrustLessAPI.Storage;
 
 namespace TrustLessAPI.Models
 {
+    /// <summary>
+    /// Recommendation model class.
+    /// </summary>
     public class Recommendation
     {
 		[Key]
