@@ -1,0 +1,35 @@
+﻿@using TrustlessClientWeb.Models
+@using TrustLessModelLib
+
+<div>
+    <h4>Make new statement:</h4>
+    <div class="row">
+        <form action="/Home/NewStatementAction" method="post">
+            <div class="col-md-3">
+                @Html.TextBox("MedicinOne")
+            </div>
+            <div class="col-md-3">
+                @Html.TextBox("MedicinTwo")
+            </div>
+            <div class="col-md-4">
+                @Html.TextBox("Description")
+            </div>
+            <div class="col-md-2">
+            	@{
+		            	if (Session["token"] == null)
+		            	{
+		            	 
+		                <input type="button" value="Submit statement" data-toggle="modal" data-target="#login-modal" class="btn btn-default" />
+
+		            	}
+		            	else
+		            	{
+		                <input type="submit" value="Submit statement" class="btn btn-default" />
+		            	} 
+            	}
+            </div>
+        </form>
+    </div>
+    <hr />
+</div>
+

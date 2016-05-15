@@ -61,6 +61,12 @@
     <Compile Include="Requests\ImportAddressRequest.cs" />
     <Compile Include="Responses\GetAddressbalancesResponse.cs" />
     <Compile Include="Requests\GetAddressbalancesRequest.cs" />
+    <Compile Include="Responses\GetTotalBalancesResponse.cs" />
+    <Compile Include="Requests\GetTotalBalancesRequest.cs" />
+    <Compile Include="Requests\IssueRequest.cs" />
+    <Compile Include="Responses\IssueResponse.cs" />
+    <Compile Include="Requests\GetTxOutRequest.cs" />
+    <Compile Include="Responses\GetTxOutResponse.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

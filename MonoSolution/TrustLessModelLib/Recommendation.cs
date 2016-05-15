@@ -21,12 +21,14 @@ namespace TrustLessModelLib
 		public int StatementId { get; set; } 
 		public Statement Statement { get; set; }
 
-        public bool IsRecommended { get; set; }
+		public bool IsRecommended { get; set; }
 
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public ReservedTransaction Transaction { get; set; }
+		public ReservedTransaction Transaction { get; set; }
 
 		public string Description { get; set; }
+
+		public DateTime CreationDate { get; set; }
 
     }
 }

@@ -3,20 +3,46 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using MultichainCliLib.Responses;
 using MultichainCliLib.Requests;
+using System.Threading;
 
 namespace MultichainCliLib
 {
 	public class MultiChainClient
 	{ 
 		private string chainName;
-		public MultiChainClient(string chainName)
+		public MultiChainClient(string chainName,string nodeIp)
 		{
 			this.chainName = chainName;
+			//is multichain running?
+			Process compiler = new Process();
+			compiler.StartInfo.FileName = "multichain-cli";
+			compiler.StartInfo.Arguments = chainName + " gettotalbalances";
+			compiler.StartInfo.UseShellExecute = false;
+			compiler.StartInfo.RedirectStandardOutput = true;
+			compiler.StartInfo.RedirectStandardError = true;
+			compiler.Start();    
+
+			compiler.WaitForExit(); 
+
+			var jsonIn = compiler.StandardOutput.ReadToEnd();
+			var errorIn = compiler.StandardError.ReadToEnd();
+
+			if (errorIn.Contains("couldn't connect to server") || errorIn.Contains("No credentials found for chain")) {
+				compiler = new Process();
+				compiler.StartInfo.FileName = "multichaind";
+				compiler.StartInfo.Arguments = chainName + "@"+nodeIp+" -daemon"; 
+
+				compiler.StartInfo.UseShellExecute = false;
+				compiler.StartInfo.RedirectStandardOutput = true;
+				compiler.StartInfo.RedirectStandardError = true;
+				compiler.Start (); 
+				Thread.Sleep (3000);
+			}
 		}
 
-		public ListAssetsRequest ListAssets()
+		public ListAssetsResponse ListAssets()
 		{
-			return (ListAssetsRequest) Execute (new ListAssetsRequest ());
+			return (ListAssetsResponse) Execute (new ListAssetsRequest ());
 		}
 
 		public PrepareLockUnspentResponse PrepareLockUnspent(Dictionary<string, int> amount)
@@ -34,9 +60,9 @@ namespace MultichainCliLib
 			return (SendToAddressResponse)Execute(new SendToAddressRequest(address, amount));
 		}
 
-		public CreateRawTransactionResponse CreateRawTransaction(string address, Dictionary<string, object> txVout,Dictionary<string, int> amount)
+		public CreateRawTransactionResponse CreateRawTransaction(string address,string txid,int vout,Dictionary<string, int> amount)
 		{
-			return (CreateRawTransactionResponse)Execute(new CreateRawTransactionRequest(address, txVout,amount));
+			return (CreateRawTransactionResponse)Execute(new CreateRawTransactionRequest(address, txid,vout,amount));
 		}
 
 		public AppendRawChangeResponse AppendRawChange(string hex, string address)
@@ -59,9 +85,9 @@ namespace MultichainCliLib
 			return (SendRawTransactionResponse)Execute(new SendRawTransactionRequest(hex));
 		}
 
-		public LockUnspentResponse LockUnspent(bool unlock, Dictionary<string, object> txVout)
+		public LockUnspentResponse LockUnspent(bool unlock, string txid,int vout)
 		{
-			return (LockUnspentResponse)Execute(new LockUnspentRequest(unlock,txVout));
+			return (LockUnspentResponse)Execute(new LockUnspentRequest(unlock,txid,vout));
 		}
 
 		public ImportAddressResponse ImportAddress(string address)
@@ -74,6 +100,18 @@ namespace MultichainCliLib
 			return (GetAddressbalancesResponse)Execute(new GetAddressbalancesRequest(address));
 		}
 
+		public GetTotalBalancesResponse GetTotalBalances()
+		{
+			return (GetTotalBalancesResponse)Execute(new GetTotalBalancesRequest());
+		}
+		public IssueResponse Issue(string address,string assetName,int qty,double unit)
+		{
+			return (IssueResponse)Execute(new IssueRequest(address,assetName,qty,unit));
+		}
+		public GetTxOutResponse GetTxOut(string txid,int vout)
+		{
+			return (GetTxOutResponse)Execute(new GetTxOutRequest(txid,vout));
+		}
 		private IResponse Execute(IRequest request)
 			{
 				try
