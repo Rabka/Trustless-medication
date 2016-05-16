@@ -20,6 +20,11 @@ namespace TrustlessAPI.Controllers
     public class StatementController : Controller
     {
         /// <summary>
+        /// Allows only for one thread inside the critical section of adding a recommendation.
+        /// </summary>
+        private object recommendationLock = new Object();
+
+        /// <summary>
         /// Gets a Json list of statements that the current user can recommend.
         /// </summary>
         /// <param name="token">String token</param>
@@ -200,15 +205,22 @@ namespace TrustlessAPI.Controllers
 				
 				recommendation = new TrustLessModelLib.Recommendation(){ Person = person, Statement = statementObject, IsRecommended = trust, Transaction = null, Description = description, CreationDate = DateTime.Now};
 
-				//This will fail if a racecondition was to add two recommendations (given that our key assignment of the table ensures only one of the same recommendation exist).
-				context.Recommendations.Add (recommendation);
 
-                //Race condition is not possible after the next line of code, only one will succeed in adding the row below.
-                context.SaveChanges ();
+			    lock (recommendationLock)
+                {
+                    if (IsStatementRecommendationsComplete(context, statementObject))
+                        return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest);
 
-				BlockChain.MakeRecommendation (context, recommendation);
+                    //This will fail if a racecondition was to add two recommendations (given that our key assignment of the table ensures only one of the same recommendation exist).
+                    context.Recommendations.Add(recommendation);
 
-				if (IsStatementRecommendationsComplete (context, statementObject))
+                    //Race condition is not possible after the next line of code, only one will succeed in adding the row below from the same user.
+                    context.SaveChanges();
+                }
+
+                BlockChain.MakeRecommendation(context, recommendation);
+
+			    if (IsStatementRecommendationsComplete (context, statementObject))
 					IssueTrustForStatement (context, statementObject);
 
 				return new HttpStatusCodeResult((int)HttpStatusCode.Created);
