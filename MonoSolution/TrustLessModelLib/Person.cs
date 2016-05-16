@@ -20,7 +20,7 @@ namespace TrustLessModelLib
 		public string PublicKey { get; set; }
 
 		[NotMapped]
-		public double TrustValue { get; set; }
+		public double Reputation { get; set; }
 
 		[ForeignKey("LoginSession")]
 		public string LoginSessionToken { get; set; } 
