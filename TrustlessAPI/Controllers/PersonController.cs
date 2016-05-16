@@ -12,8 +12,15 @@ using TrustLessAPI.Storage;
 
 namespace TrustlessAPI.Controllers
 {
+    /// <summary>
+    /// PersonController handles REST methods related to user login, creation and loginsession.
+    /// </summary>
     public class PersonController : Controller
 	{
+        /// <summary>
+        /// Returns a Json serialized list of Person (user) that only specifies username.
+        /// </summary>
+        /// <returns>Json list of Person</returns>
 		public ActionResult GetPersons()
 		{
 			using (DataContext context = new DataContext())
@@ -22,6 +29,11 @@ namespace TrustlessAPI.Controllers
 			} 
 		}
 
+        /// <summary>
+        /// Creates a new user and returns a boolean (success).
+        /// </summary>
+        /// <param name="person">Person</param>
+        /// <returns>Success boolean</returns>
 		private bool CreateNewPerson(Person person)
 		{
 			using (DataContext context = new DataContext())
@@ -43,6 +55,12 @@ namespace TrustlessAPI.Controllers
 			}
 
 		}
+
+        /// <summary>
+        /// Login attempt
+        /// </summary>
+        /// <param name="person">Person (user)</param>
+        /// <returns>Json instance of LoginSession</returns>
 		[HttpPost]
 		public ActionResult Login(Person person)
 		{
@@ -68,6 +86,14 @@ namespace TrustlessAPI.Controllers
 			}
 
 		}
+
+        /// <summary>
+        /// Renews a LoginSession and replaces an already existing session.
+        /// </summary>
+        /// <param name="context">DataContext</param>
+        /// <param name="session">LoginSession</param>
+        /// <param name="person">Person (user)</param>
+        /// <returns>LoginSession</returns>
 		public static LoginSession RenewSession(DataContext context,LoginSession session,Person person)
 		{  
 			session = new LoginSession (Guid.NewGuid ().ToString (), DateTime.Now); 
@@ -76,14 +102,25 @@ namespace TrustlessAPI.Controllers
 			person.LoginSession = session;
 			context.SaveChanges();   
 			return session;
-		} 
+		}
 
+        /// <summary>
+        /// Refreshes a LoginSession such that the login token won't expire.
+        /// </summary>
+        /// <param name="context">DataContext</param>
+        /// <param name="session">LoginSession</param>
 		public static void UpdateLoginSession(DataContext context,LoginSession session)
 		{ 
 				session.LastUpdatedDateTime = DateTime.Now;
 				context.SaveChanges();   
 		}
 
+        /// <summary>
+        /// Validates a string token representing a LoginSession. Will keep the LoginSession up to date if it's valid.
+        /// </summary>
+        /// <param name="context">DateContext</param>
+        /// <param name="token">String token</param>
+        /// <returns>bool valid</returns>
 		public static bool ValidateLoginSession(DataContext context,string token)
 		{ 
 			Person person = context.Persons.FirstOrDefault (x => x.LoginSessionToken != null && x.LoginSessionToken == token);

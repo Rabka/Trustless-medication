@@ -1,0 +1,47 @@
+﻿<Properties StartupItem="TrustLessWebClient/TrustLessWebClient.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" PreferredExecutionTarget="firefox" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="TrustLessWebClient/Models/Repository.cs">
+    <Files>
+      <File FileName="MultichainCliLib/MultichainClient.cs" Line="1" Column="1" />
+      <File FileName="TrustlessAPI/Models/BlockChain.cs" Line="1" Column="1" />
+      <File FileName="MultichainCliLib/Responses/ListAssetsResponse.cs" Line="1" Column="1" />
+      <File FileName="TrustlessAPI/Controllers/StatementController.cs" Line="108" Column="43" />
+      <File FileName="MultichainCliLib/Requests/LockUnspentRequest.cs" Line="12" Column="29" />
+      <File FileName="MultichainCliLib/Requests/PrepareLockUnspentRequest.cs" Line="1" Column="1" />
+      <File FileName="MultichainCliLib/Requests/GetTxOutRequest.cs" Line="1" Column="1" />
+      <File FileName="MultichainCliLib/Requests/ImportAddressRequest.cs" Line="1" Column="1" />
+      <File FileName="MultichainCliLib/Responses/GetTxOutResponse.cs" Line="1" Column="1" />
+      <File FileName="MultichainCliLib/Requests/IssueRequest.cs" Line="1" Column="1" />
+      <File FileName="MultichainCliLib/Requests/SendRawTransactionRequest.cs" Line="1" Column="1" />
+      <File FileName="TrustLessWebClient/Models/Repository.cs" Line="240" Column="1" />
+      <File FileName="TrustlessAPI/web.config" Line="1" Column="1" />
+      <File FileName="TrustLessWebClient/Web.config" Line="1" Column="1" />
+      <File FileName="TrustlessAPI/Models/DataContext.cs" Line="1" Column="1" />
+      <File FileName="MultichainCliLib/Requests/CreateRawTransactionRequest.cs" Line="1" Column="1" />
+      <File FileName="TrustLessModelLib/Person.cs" Line="23" Column="27" />
+      <File FileName="TrustLessWebClient/Controllers/HomeController.cs" Line="14" Column="19" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/home/patr0805/BlockChainTester/BlockChainTester/Program.cs" line="22" column="1" />
+      <Breakpoint file="/home/patr0805/BlockChainTester/BlockChainTester/Program.cs" line="18" column="1" />
+      <Breakpoint file="/home/patr0805/BlockChainTester/Tester/MainWindow.cs" line="34" column="1" />
+      <Breakpoint file="/home/patr0805/Documents/BlockChainTester/TrustlessAPI/Models/BlockChain.cs" line="79" column="1" />
+      <Breakpoint file="/home/patr0805/Documents/BlockChainTester/TrustlessAPI/Models/BlockChain.cs" line="46" column="1" />
+      <Breakpoint file="/home/patr0805/Documents/BlockChainTester/TrustlessAPI/Controllers/StatementController.cs" line="92" column="1" />
+      <Breakpoint file="/home/patr0805/Documents/TrustLessSolution/TrustlessAPI/Controllers/StatementController.cs" line="114" column="1" />
+      <Breakpoint file="/home/patr0805/Documents/TrustLessSolution/TrustlessAPI/Controllers/PersonController.cs" line="90" column="1" />
+      <Breakpoint file="/home/patr0805/Documents/TrustLessSolution/TrustLessWebClient/Models/Repository.cs" line="97" column="1" />
+      <Breakpoint file="/home/patr0805/Desktop/TrustLessSolution/TrustlessAPI/Controllers/StatementController.cs" line="179" column="1" />
+      <Breakpoint file="/home/patr0805/Desktop/TrustLessSolution/TrustlessAPI/Controllers/StatementController.cs" line="203" column="1" />
+      <Breakpoint file="/home/patr0805/Desktop/TrustLessSolution/TrustlessAPI/Controllers/StatementController.cs" line="206" column="1" />
+      <Breakpoint file="/home/patr0805/Desktop/TrustLessSolution/TrustlessAPI/Controllers/StatementController.cs" line="208" column="1" />
+      <Breakpoint file="/home/patr0805/Desktop/TrustLessSolution/TrustlessAPI/Controllers/StatementController.cs" line="212" column="1" />
+      <Breakpoint file="/home/patr0805/Desktop/TrustLessSolution/TrustlessAPI/Controllers/StatementController.cs" line="214" column="1" />
+      <Breakpoint file="/home/patr0805/Desktop/TrustLessSolution/TrustlessAPI/Models/BlockChain.cs" line="139" column="1" />
+      <Breakpoint file="/home/patr0805/Desktop/TrustLessSolution/MultichainCliLib/MultichainClient.cs" line="120" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

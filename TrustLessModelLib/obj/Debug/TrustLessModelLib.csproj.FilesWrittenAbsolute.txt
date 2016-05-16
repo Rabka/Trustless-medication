@@ -1,0 +1,10 @@
+/home/patr0805/Desktop/TrustLessSolution/TrustLessModelLib/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/patr0805/Desktop/TrustLessSolution/TrustLessModelLib/bin/Debug/TrustLessModelLib.dll.mdb
+/home/patr0805/Desktop/TrustLessSolution/TrustLessModelLib/bin/Debug/TrustLessModelLib.dll
+/home/patr0805/Desktop/TrustLessSolution/TrustLessModelLib/obj/Debug/TrustLessModelLib.dll
+/home/patr0805/Desktop/TrustLessSolution/TrustLessModelLib/obj/Debug/TrustLessModelLib.dll.mdb
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/TrustLessModelLib/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/TrustLessModelLib/bin/Debug/TrustLessModelLib.dll.mdb
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/TrustLessModelLib/bin/Debug/TrustLessModelLib.dll
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/TrustLessModelLib/obj/Debug/TrustLessModelLib.dll
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/TrustLessModelLib/obj/Debug/TrustLessModelLib.dll.mdb

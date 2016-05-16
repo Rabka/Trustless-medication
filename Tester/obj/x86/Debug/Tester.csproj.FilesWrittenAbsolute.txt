@@ -1,0 +1,5 @@
+/home/patr0805/Desktop/TrustLessSolution/Tester/obj/x86/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/home/patr0805/Desktop/TrustLessSolution/Tester/obj/x86/Debug/Tester.gtk-gui.gui.stetic
+/home/patr0805/Desktop/TrustLessSolution/Tester/bin/Debug/MultichainCliLib.dll
+/home/patr0805/Desktop/TrustLessSolution/Tester/bin/Debug/MultichainCliLib.dll.mdb
+/home/patr0805/Desktop/TrustLessSolution/Tester/bin/Debug/Newtonsoft.Json.dll

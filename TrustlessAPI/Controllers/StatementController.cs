@@ -14,9 +14,21 @@ using System.Web.Configuration;
 
 namespace TrustlessAPI.Controllers
 {
+    /// <summary>
+    /// StatementController handles REST methods related to statement creation, search and recommendation.
+    /// </summary>
     public class StatementController : Controller
     {
+        /// <summary>
+        /// Allows only for one thread inside the critical section of adding a recommendation.
+        /// </summary>
+        private object recommendationLock = new Object();
 
+        /// <summary>
+        /// Gets a Json list of statements that the current user can recommend.
+        /// </summary>
+        /// <param name="token">String token</param>
+        /// <returns>Json list of Statement</returns>
 		public ActionResult GetStatements(string token)
 		{ 
 			using (DataContext context = new DataContext())
@@ -64,6 +76,12 @@ namespace TrustlessAPI.Controllers
 			}
 		}
 
+        /// <summary>
+        /// Searches for a completed statement (recommendations complete) that fits medicineOne taken with medicineTwo parameter.
+        /// </summary>
+        /// <param name="medicinOne">String name</param>
+        /// <param name="medicinTwo">String name</param>
+        /// <returns>Statement</returns>
 		public ActionResult SearchStatement(string medicinOne, string medicinTwo)
 		{
 			using (DataContext context = new DataContext())
@@ -77,16 +95,26 @@ namespace TrustlessAPI.Controllers
 			} 
 		}
 
+        /// <summary>
+        /// Gets the recommendations for a given statement.
+        /// </summary>
+        /// <param name="statement">int id of statement</param>
+        /// <returns>Json list of recommendations</returns>
 		public ActionResult GetRecommendations(int statement)
 		{
 			using (DataContext context = new DataContext())
 			{
 				var recommendations = context.Recommendations.Include("Person").Where (x => x.StatementId == statement).ToList ();
-				recommendations.ForEach(x => x.Person.TrustValue = CalculateBayesianModelTrust(x.Person));
+				recommendations.ForEach(x => x.Person.Reputation = CalculateBayesianModelTrust(x.Person));
 				return Content ( JsonConvert.SerializeObject(recommendations)); 
 			} 
 		}
 
+        /// <summary>
+        /// Creates a new statement of two medicines being takable together.
+        /// </summary>
+        /// <param name="statement">Statement</param>
+        /// <returns>HTTP status created</returns>
 		[HttpPost]
 		public ActionResult CreateNewStatement(TrustLessModelLib.Statement statement)
 		{ 
@@ -129,6 +157,13 @@ namespace TrustlessAPI.Controllers
 			}
 		}
 
+        /// <summary>
+        /// Recommends trust/untrusted for a given statement for the current user.
+        /// </summary>
+        /// <param name="statement">in statement id</param>
+        /// <param name="token">String</param>
+        /// <param name="trust">boolean trust</param>
+        /// <returns>Created</returns>
 		[HttpPost]
 		public ActionResult Recommend(int statement, string token, bool trust)
 		{
@@ -170,19 +205,34 @@ namespace TrustlessAPI.Controllers
 				
 				recommendation = new TrustLessModelLib.Recommendation(){ Person = person, Statement = statementObject, IsRecommended = trust, Transaction = null, Description = description, CreationDate = DateTime.Now};
 
-				//This will fail if a racecondition was to add two recommendations (given that our key assignment of the table ensures only one of the same recommendation exist).
-				context.Recommendations.Add (recommendation);
-				context.SaveChanges ();
 
-				BlockChain.MakeRecommendation (context, recommendation);
+			    lock (recommendationLock)
+                {
+                    if (IsStatementRecommendationsComplete(context, statementObject))
+                        return new HttpStatusCodeResult((int)HttpStatusCode.BadRequest);
 
-				if (IsStatementRecommendationsComplete (context, statementObject))
+                    //This will fail if a racecondition was to add two recommendations (given that our key assignment of the table ensures only one of the same recommendation exist).
+                    context.Recommendations.Add(recommendation);
+
+                    //Race condition is not possible after the next line of code, only one will succeed in adding the row below from the same user.
+                    context.SaveChanges();
+                }
+
+                BlockChain.MakeRecommendation(context, recommendation);
+
+			    if (IsStatementRecommendationsComplete (context, statementObject))
 					IssueTrustForStatement (context, statementObject);
 
 				return new HttpStatusCodeResult((int)HttpStatusCode.Created);
 			}
 		}
 
+        /// <summary>
+        /// Returns a boolean clarifying that a statement is complete.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="statement"></param>
+        /// <returns></returns>
 		private bool IsStatementRecommendationsComplete(DataContext context,TrustLessModelLib.Statement statement)
 		{
 			var recommendationAmount =
@@ -192,6 +242,12 @@ namespace TrustlessAPI.Controllers
 			return recommendationAmount >= maxVotings;
 		}
 
+        /// <summary>
+        /// Rewards users that have made a correct recommendation with an S asset and punishes users
+        /// who were wrong in their recommendation.
+        /// </summary>
+        /// <param name="context">DataContext</param>
+        /// <param name="statement">Statement</param>
 		private void IssueTrustForStatement(DataContext context,TrustLessModelLib.Statement statement)
 		{
 			var recommendations =
@@ -203,38 +259,48 @@ namespace TrustlessAPI.Controllers
 			foreach (Recommendation recommendation in recommendations) {
 				if (sAmount >= fAmount) {
 					if (recommendation.IsRecommended) {
-						BlockChain.IssueS (recommendation);
+						BlockChain.Issue (recommendation,true);
 					} else {
-						BlockChain.IssueF (recommendation);
+						BlockChain.Issue (recommendation,false);
 					}
 				} else {
 					if (recommendation.IsRecommended) {
-						BlockChain.IssueF (recommendation);
+						BlockChain.Issue (recommendation,false);
 					} else {
-						BlockChain.IssueS (recommendation);
+						BlockChain.Issue (recommendation,true);
 					}
 				}
 			}
 		}
 
+        /// <summary>
+        /// Calculates the Bayesian reputation value for a given Person (user).
+        /// </summary>
+        /// <param name="person">Person (user)</param>
+        /// <returns>double reputation value</returns>
 		private double CalculateBayesianModelTrust(Person person)
 		{
 			double initialTrust = Convert.ToDouble(WebConfigurationManager.AppSettings["InitialTrust"]);
 			double trustProblabilityOfGoodPerson = Convert.ToDouble(WebConfigurationManager.AppSettings["TrustProblabilityOfGoodPerson"]);
 			double nonTrustProblabilityOfBadPerson = Convert.ToDouble(WebConfigurationManager.AppSettings["ŃonTrustProblabilityOfBadPerson"]);
 
-			double[] sfFloats = GetSVFromBlockChain(person);
+            double[] sfFloats = GetSFFromBlockChain(person);
 
-			double trustValue =  (initialTrust*Math.Pow(trustProblabilityOfGoodPerson, sfFloats[0])*
+			double reputation =  (initialTrust*Math.Pow(trustProblabilityOfGoodPerson, sfFloats[0])*
 			        Math.Pow(1 - trustProblabilityOfGoodPerson, sfFloats[1]))/
 				(initialTrust*Math.Pow(trustProblabilityOfGoodPerson, sfFloats[0])*
 				 Math.Pow(1 - trustProblabilityOfGoodPerson, sfFloats[1]) +
 				 (1 - initialTrust)*Math.Pow(nonTrustProblabilityOfBadPerson, sfFloats[0])*
 				 Math.Pow(1 - nonTrustProblabilityOfBadPerson, sfFloats[1]));
-			return trustValue;
+            return reputation;
 		}
 
-		private double[] GetSVFromBlockChain(Person person)
+        /// <summary>
+        /// Returns the S and F from the BlockChain for a given person (user).
+        /// </summary>
+        /// <param name="person">Person (user)</param>
+        /// <returns>double array, first index is S amount, second index is F amount.</returns>
+		private double[] GetSFFromBlockChain(Person person)
 		{
 			var balances = BlockChain.GetPersonBalance (person);
 

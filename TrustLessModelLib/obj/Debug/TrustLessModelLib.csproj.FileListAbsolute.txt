@@ -1,0 +1,5 @@
+D:\Skole\Github\Trustless-medication\TrustLessModelLib\bin\Debug\TrustLessModelLib.dll
+D:\Skole\Github\Trustless-medication\TrustLessModelLib\bin\Debug\TrustLessModelLib.pdb
+D:\Skole\Github\Trustless-medication\TrustLessModelLib\obj\Debug\TrustLessModelLib.csprojResolveAssemblyReference.cache
+D:\Skole\Github\Trustless-medication\TrustLessModelLib\obj\Debug\TrustLessModelLib.dll
+D:\Skole\Github\Trustless-medication\TrustLessModelLib\obj\Debug\TrustLessModelLib.pdb

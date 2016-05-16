@@ -1,0 +1,12 @@
+/home/patr0805/Desktop/TrustLessSolution/MultichainCliLib/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/home/patr0805/Desktop/TrustLessSolution/MultichainCliLib/bin/Debug/MultichainCliLib.dll.mdb
+/home/patr0805/Desktop/TrustLessSolution/MultichainCliLib/bin/Debug/MultichainCliLib.dll
+/home/patr0805/Desktop/TrustLessSolution/MultichainCliLib/obj/Debug/MultichainCliLib.dll
+/home/patr0805/Desktop/TrustLessSolution/MultichainCliLib/obj/Debug/MultichainCliLib.dll.mdb
+/home/patr0805/Desktop/TrustLessSolution/MultichainCliLib/bin/Debug/Newtonsoft.Json.dll
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/MultichainCliLib/obj/Debug/.NETFramework,Version=v4.0.AssemblyAttribute.cs
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/MultichainCliLib/bin/Debug/MultichainCliLib.dll.mdb
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/MultichainCliLib/bin/Debug/MultichainCliLib.dll
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/MultichainCliLib/obj/Debug/MultichainCliLib.dll
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/MultichainCliLib/obj/Debug/MultichainCliLib.dll.mdb
+/media/patr0805/Data/Skole/Github/Trustless-medication/MonoSolution/MultichainCliLib/bin/Debug/Newtonsoft.Json.dll
