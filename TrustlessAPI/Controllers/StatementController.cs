@@ -64,7 +64,7 @@ namespace TrustlessAPI.Controllers
 					//					}
 					//					return Content ( JsonConvert.SerializeObject(finalStatement));
 					var dt = DateTime.Now - new TimeSpan (8, 0, 0, 0);
-					if (context.Recommendations.Any (x => x.CreationDate < dt))
+                    if (context.Recommendations.Any(x => x.CreationDate < dt && x.PersonUsername == person.Username))
 						return Content ("[]");
 
 					string newId = Guid.NewGuid ().ToString();
