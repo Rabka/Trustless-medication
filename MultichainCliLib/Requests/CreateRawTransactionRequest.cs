@@ -24,7 +24,7 @@ namespace MultichainCliLib
 			string inputCmd = lines [0];
 			string jsonOutput = json.Substring (inputCmd.Length);	
 
-			CreateRawTransactionResponse response = new CreateRawTransactionResponse() { Hex = jsonOutput };
+			CreateRawTransactionResponse response = new CreateRawTransactionResponse() { Hex = jsonOutput.Trim() };
 			return response;
 		}
 

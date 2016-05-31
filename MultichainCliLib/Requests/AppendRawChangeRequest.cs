@@ -18,7 +18,7 @@ namespace MultichainCliLib
 			string inputCmd = lines [0];
 			string jsonOutput = json.Substring (inputCmd.Length);	
 
-			AppendRawChangeResponse response = new AppendRawChangeResponse() { Hex = jsonOutput };
+			AppendRawChangeResponse response = new AppendRawChangeResponse() { Hex = jsonOutput.Trim() };
 			return response;
 		}
 
